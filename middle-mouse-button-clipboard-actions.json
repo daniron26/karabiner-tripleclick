@@ -1,0 +1,140 @@
+{
+    "title": "Mouse Middle Button Actions",
+    "rules": [
+        {
+        "description": "Double middle mouse button to copy, triple to cut, hold to paste",
+        "manipulators": [
+            {
+            "description": "triple tap block, change trigger in `from` block, effect in `to: key_code block`.",
+            "type": "basic",
+            "from": {
+                "pointing_button": "button3",
+                "modifiers": {
+                    "optional": ["any"]
+                }
+            },
+            "to": [
+                {
+                "key_code": "x",
+                "modifiers": ["left_command"]
+            },
+                {
+                "set_variable": {
+                    "name": "mouse3_tap",
+                    "value": 0
+                }
+            },
+                {
+                "set_variable": {
+                    "name": "mouse3_double_tap",
+                    "value": 0
+                }
+            }
+            ],
+            "conditions": [
+                {
+                "type": "variable_if",
+                "name": "mouse3_double_tap",
+                "value": 1
+            }
+            ]
+        },
+            {
+            "description": "double tap block, change trigger in `from`  block, change effect in `to: key_code` block; change triple tap time threshold in `parameters` block.",
+            "type": "basic",
+            "from": {
+                "pointing_button": "button3",
+                "modifiers": {
+                    "optional": ["any"]
+                }
+            },
+            "to": [
+                {
+                "key_code": "c",
+                "modifiers": ["left_command"]
+            },
+                {
+                "set_variable": {
+                    "name": "mouse3_tap",
+                    "value": 0
+                }
+            },
+                {
+                "set_variable": {
+                    "name": "mouse3_double_tap",
+                    "value": 0
+                }
+            }
+            ],
+            "to_delayed_action": {
+                "to_if_invoked": [
+                    {
+                    "set_variable": {
+                        "name": "mouse3_double_tap",
+                        "value": 0
+                    }
+                }
+                ]
+            },
+            "conditions": [
+                {
+                "type": "variable_if",
+                "name": "mouse3_tap",
+                "value": 1
+            }
+            ],
+            "parameters": {"basic.to_delayed_action_delay_milliseconds": 200}
+        },
+            {
+            "description": "Single tap and hold key block. change trigger in `from` block, single tap effect in `to_if_invoked` block; hold effect in `to_if_held_down` blokc; use `basic.to_delayed_action_delay_milliseconds` to set the double click threshold, `basic.to_if_held_down_threshold_milliseconds` to set the paste threshold",
+            "type": "basic",
+            "from": {
+                "pointing_button": "button3",
+                "modifiers": {
+                    "optional": ["any"]
+                }
+            },
+            "to_if_held_down": [
+                {
+                "key_code": "v",
+                "modifiers": ["left_command"],
+                "repeat": false
+            }
+            ],
+            "to_delayed_action": {
+                "to_if_invoked": [
+                    {"pointing_button": "button3"},
+                    {
+                    "set_variable": {
+                        "name": "mouse3_tap",
+                        "value": 0
+                    }
+                }
+                ],
+                "to_if_canceled": [
+                    {
+                    "set_variable": {
+                        "name": "mouse3_double_tap",
+                        "value": 1
+                    }
+
+                }
+                ]
+            },
+            "to": [
+                {
+                "set_variable": {
+                    "name": "mouse3_tap",
+                    "value": 1
+                }
+            }
+            ],
+            "parameters": {
+                "basic.to_delayed_action_delay_milliseconds": 200,
+                "basic.to_if_held_down_threshold_milliseconds": 220
+            }
+        }
+        ]
+    }
+    ]
+}
